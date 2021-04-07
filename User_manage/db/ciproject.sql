@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Apr 05, 2021 at 05:54 AM
+-- Generation Time: Apr 07, 2021 at 02:49 PM
 -- Server version: 10.1.30-MariaDB
 -- PHP Version: 7.0.27
 
@@ -91,6 +91,39 @@ CREATE TABLE `cities` (
   `state_id` int(9) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `cities`
+--
+
+INSERT INTO `cities` (`id`, `city_name`, `state_id`) VALUES
+(1, 'Ahmedabad', 3),
+(2, 'Surat', 3),
+(3, 'Vadodara', 3),
+(4, 'Mumbai', 5),
+(5, 'Pune', 5),
+(6, 'Nasik', 5),
+(7, 'Jaipur', 4),
+(8, 'Jodhpur', 4),
+(9, 'Udaipur', 4),
+(10, 'Oakland', 6),
+(11, 'Los Angeles', 6),
+(12, 'San Jose', 6),
+(13, 'Miami', 8),
+(14, 'Orlando', 8),
+(15, 'Tampa', 8),
+(16, 'Houston', 7),
+(17, 'Dallas', 7),
+(18, 'Austin', 7),
+(19, 'Sapporo', 9),
+(20, 'Otaru', 9),
+(21, 'Chitose', 9),
+(22, 'Tokyo', 10),
+(23, 'Yokohama', 10),
+(24, 'Saitama', 10),
+(25, 'Takamatsu', 11),
+(26, 'Tokushima', 11),
+(27, 'Naruto', 11);
+
 -- --------------------------------------------------------
 
 --
@@ -122,6 +155,15 @@ CREATE TABLE `countries` (
   `country_name` varchar(250) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `countries`
+--
+
+INSERT INTO `countries` (`id`, `country_name`) VALUES
+(1, 'America'),
+(2, 'Inida'),
+(3, 'Japan');
+
 -- --------------------------------------------------------
 
 --
@@ -132,9 +174,17 @@ CREATE TABLE `education_details` (
   `id` int(9) NOT NULL,
   `user_id` int(9) NOT NULL,
   `course` varchar(250) DEFAULT NULL,
-  `college` varchar(250) DEFAULT NULL,
-  `duration` int(9) DEFAULT NULL
+  `college` varchar(250) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `education_details`
+--
+
+INSERT INTO `education_details` (`id`, `user_id`, `course`, `college`) VALUES
+(1, 2, 'MCA', 'L.D.'),
+(2, 3, 'asdfa', 'asdfa'),
+(3, 4, 'Bca', 'K.K');
 
 -- --------------------------------------------------------
 
@@ -202,8 +252,18 @@ CREATE TABLE `profile` (
   `user_id` int(9) NOT NULL,
   `skills` text,
   `bio` text,
+  `city_id` int(9) DEFAULT NULL,
   `profile_pic` text
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+--
+-- Dumping data for table `profile`
+--
+
+INSERT INTO `profile` (`id`, `user_id`, `skills`, `bio`, `city_id`, `profile_pic`) VALUES
+(1, 2, 'Python, Java, PHP', 'I am web-dev.', 21, NULL),
+(2, 3, 'asdfas', 'asdfas', NULL, NULL),
+(3, 4, 'python, php', 'trying to become web dev.', 14, NULL);
 
 -- --------------------------------------------------------
 
@@ -240,6 +300,21 @@ CREATE TABLE `states` (
   `country_id` int(9) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `states`
+--
+
+INSERT INTO `states` (`id`, `state_name`, `country_id`) VALUES
+(3, 'Gujarat', 2),
+(4, 'Rajasthan', 2),
+(5, 'Maharastra', 2),
+(6, 'California', 1),
+(7, 'Texas', 1),
+(8, 'Florida', 1),
+(9, 'Hokkaido', 3),
+(10, 'Kanto', 3),
+(11, 'Shikoku', 3);
+
 -- --------------------------------------------------------
 
 --
@@ -262,6 +337,27 @@ INSERT INTO `user` (`id`, `username`, `email`, `contact`, `password`) VALUES
 (2, 'test2_123', 'test2@gmail.com', 1234567890, '123'),
 (3, 'test123', 't@g.c', 1334, '123');
 
+-- --------------------------------------------------------
+
+--
+-- Table structure for table `users`
+--
+
+CREATE TABLE `users` (
+  `id` int(11) NOT NULL,
+  `oauth_provider` varchar(10) COLLATE utf8_unicode_ci NOT NULL,
+  `oauth_uid` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `first_name` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
+  `last_name` varchar(25) COLLATE utf8_unicode_ci NOT NULL,
+  `email` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
+  `gender` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `locale` varchar(10) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `picture` varchar(255) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `link` varchar(255) COLLATE utf8_unicode_ci NOT NULL,
+  `created` datetime NOT NULL,
+  `modified` datetime NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
 --
 -- Indexes for dumped tables
 --
@@ -283,7 +379,8 @@ ALTER TABLE `answers`
 -- Indexes for table `cities`
 --
 ALTER TABLE `cities`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `state_id` (`state_id`);
 
 --
 -- Indexes for table `comments`
@@ -325,7 +422,8 @@ ALTER TABLE `login`
 --
 ALTER TABLE `profile`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `user_id` (`user_id`);
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `city_id` (`city_id`);
 
 --
 -- Indexes for table `question`
@@ -352,6 +450,12 @@ ALTER TABLE `user`
   ADD KEY `username_2` (`username`);
 
 --
+-- Indexes for table `users`
+--
+ALTER TABLE `users`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- AUTO_INCREMENT for dumped tables
 --
 
@@ -365,7 +469,7 @@ ALTER TABLE `answers`
 -- AUTO_INCREMENT for table `cities`
 --
 ALTER TABLE `cities`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 
 --
 -- AUTO_INCREMENT for table `comments`
@@ -377,13 +481,13 @@ ALTER TABLE `comments`
 -- AUTO_INCREMENT for table `countries`
 --
 ALTER TABLE `countries`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `education_details`
 --
 ALTER TABLE `education_details`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `fb_users`
@@ -401,7 +505,7 @@ ALTER TABLE `login`
 -- AUTO_INCREMENT for table `profile`
 --
 ALTER TABLE `profile`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `question`
@@ -413,13 +517,19 @@ ALTER TABLE `question`
 -- AUTO_INCREMENT for table `states`
 --
 ALTER TABLE `states`
-  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT for table `user`
 --
 ALTER TABLE `user`
   MODIFY `id` int(9) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+
+--
+-- AUTO_INCREMENT for table `users`
+--
+ALTER TABLE `users`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
 
 --
 -- Constraints for dumped tables
@@ -430,6 +540,12 @@ ALTER TABLE `user`
 --
 ALTER TABLE `answers`
   ADD CONSTRAINT `answers_ibfk_1` FOREIGN KEY (`q_id`) REFERENCES `question` (`id`);
+
+--
+-- Constraints for table `cities`
+--
+ALTER TABLE `cities`
+  ADD CONSTRAINT `cities_ibfk_1` FOREIGN KEY (`state_id`) REFERENCES `states` (`id`);
 
 --
 -- Constraints for table `comments`
@@ -447,7 +563,8 @@ ALTER TABLE `education_details`
 -- Constraints for table `profile`
 --
 ALTER TABLE `profile`
-  ADD CONSTRAINT `profile_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `login` (`id`);
+  ADD CONSTRAINT `profile_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `login` (`id`),
+  ADD CONSTRAINT `profile_ibfk_2` FOREIGN KEY (`city_id`) REFERENCES `cities` (`id`);
 
 --
 -- Constraints for table `states`
